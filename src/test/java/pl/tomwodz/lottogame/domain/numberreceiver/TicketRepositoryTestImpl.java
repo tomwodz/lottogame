@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class InMemoryNumberReceiverRepositoryTestImpl implements NumberReceiverRepository {
+public class TicketRepositoryTestImpl implements TicketRepository {
 
     Map<String, Ticket> inMemoryDatabase = new ConcurrentHashMap<>();
     @Override
     public Ticket save(Ticket ticket) {
-        inMemoryDatabase.put(ticket.ticketId(), ticket);
+        inMemoryDatabase.put(ticket.hash(), ticket);
         return ticket;
     }
 

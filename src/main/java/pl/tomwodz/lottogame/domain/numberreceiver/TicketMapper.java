@@ -6,8 +6,8 @@ public class TicketMapper {
 
     public static TicketDto mapFromTicket(Ticket ticket) {
         return TicketDto.builder().
-                numbersFromUser(ticket.numbersFromUser())
-                .ticketId(ticket.ticketId())
+                numbers(ticket.numbers())
+                .hash(ticket.hash())
                 .drawDate(ticket.drawDate())
                 .build();
     }

@@ -1,40 +1,47 @@
 package pl.tomwodz.lottogame.domain.numberreceiver;
 
 import lombok.AllArgsConstructor;
-import pl.tomwodz.lottogame.domain.numberreceiver.dto.InputNumberResultDto;
+import pl.tomwodz.lottogame.domain.numberreceiver.dto.NumberReceiverResponseDto;
 import pl.tomwodz.lottogame.domain.numberreceiver.dto.TicketDto;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
-
-import static pl.tomwodz.lottogame.domain.numberreceiver.dto.InputNumberResultDto.*;
 
 @AllArgsConstructor
 public class NumberReceiverFacade {
 
     private final NumberValidator validator;
-    private final NumberReceiverRepository repository;
+    private final TicketRepository repository;
     private final Clock clock;
+    private final HashGenerator hashGenerator;
+    private final DrawDateGenerator drawDateGenerator;
 
-    public InputNumberResultDto inputNumbers(Set<Integer> numbersFromUser) {
+    public NumberReceiverResponseDto inputNumbers(Set<Integer> numbersFromUser) {
         boolean areAllNumbersInRange = validator.areAllNumbersInRange(numbersFromUser);
         if (areAllNumbersInRange) {
-            String ticketId = UUID.randomUUID().toString();
-            LocalDateTime drawDate = LocalDateTime.now(clock);
-            Ticket savedTicket = repository.save(new Ticket(ticketId, drawDate, numbersFromUser));
-            return builder()
-                    .drawDate(savedTicket.drawDate())
-                    .ticketId(savedTicket.ticketId())
-                    .numbersFromUser(numbersFromUser)
-                    .message("Success")
+            String hash = hashGenerator.getHash();
+            LocalDateTime drawDate = drawDateGenerator.getNextDrawDate();
+
+            TicketDto generatedTicket = TicketDto.builder()
+                    .hash(hash)
+                    .drawDate(drawDate)
+                    .numbers(numbersFromUser)
                     .build();
+
+            Ticket ticketToSave = Ticket.builder()
+                    .hash(hash)
+                    .drawDate(generatedTicket.drawDate())
+                    .numbers(generatedTicket.numbers())
+                    .build();
+
+
+            repository.save(ticketToSave);
+
+            return new NumberReceiverResponseDto(generatedTicket, "Success");
         }
-        return builder()
-                .message("Failed")
-                .build();
+        return new NumberReceiverResponseDto(null, "Failed");
     }
 
     public List<TicketDto> userNumbers(LocalDateTime date){
