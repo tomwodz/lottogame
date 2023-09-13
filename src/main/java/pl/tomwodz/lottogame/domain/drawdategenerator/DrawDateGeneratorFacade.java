@@ -1,4 +1,6 @@
-package pl.tomwodz.lottogame.domain.numberreceiver;
+package pl.tomwodz.lottogame.domain.drawdategenerator;
+
+import lombok.AllArgsConstructor;
 
 import java.time.Clock;
 import java.time.DayOfWeek;
@@ -6,16 +8,14 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
+@AllArgsConstructor
+public class DrawDateGeneratorFacade {
 
-class DrawDateGenerator {
     private final Clock clock;
 
     private static final LocalTime DRAW_TIME = LocalTime.of(12, 0, 0);
     private static final TemporalAdjuster NEXT_DRAW_DAY = TemporalAdjusters.next(DayOfWeek.SATURDAY);
 
-    public DrawDateGenerator(Clock clock) {
-        this.clock = clock;
-    }
 
     public LocalDateTime getNextDrawDate() {
         LocalDateTime currentDateTime = LocalDateTime.now(clock);

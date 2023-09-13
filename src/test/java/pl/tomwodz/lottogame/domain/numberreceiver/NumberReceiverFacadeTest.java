@@ -2,9 +2,12 @@ package pl.tomwodz.lottogame.domain.numberreceiver;
 
 import org.junit.jupiter.api.Test;
 import pl.tomwodz.lottogame.domain.AdjustableClock;
+import pl.tomwodz.lottogame.domain.drawdategenerator.DrawDateGeneratorFacade;
 import pl.tomwodz.lottogame.domain.numberreceiver.dto.NumberReceiverResponseDto;
 import pl.tomwodz.lottogame.domain.numberreceiver.dto.TicketDto;
+import pl.tomwodz.lottogame.domain.validator.ValidatorFacade;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -16,13 +19,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 class NumberReceiverFacadeTest {
     AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023,9,7, 14, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
 
-    NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade(
-
-            new NumberValidator(),
+    NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().numberReceiverFacade(
             new TicketRepositoryTestImpl(),
             clock,
             new HashGeneratorImpl(),
-            new DrawDateGenerator(clock)
+            new ValidatorFacade(),
+            new DrawDateGeneratorFacade(clock)
     );
 
     @Test
@@ -82,10 +84,10 @@ class NumberReceiverFacadeTest {
     public void shouldReturnSaveToDatabaseWhenUserGaveSixNumbers(){
 
         //given
-        DrawDateGenerator drawDateGenerator = new DrawDateGenerator(clock);
+        DrawDateGeneratorFacade drawDateGeneratorFacade = new DrawDateGeneratorFacade(clock);
         Set<Integer> numbersFromUser = Set.of(1,2,3,4,5,6);
         NumberReceiverResponseDto result = numberReceiverFacade.inputNumbers(numbersFromUser);
-        LocalDateTime drawDate = drawDateGenerator.getNextDrawDate();
+        LocalDateTime drawDate = drawDateGeneratorFacade.getNextDrawDate();
 
         //when
         List<TicketDto> ticketDtos = numberReceiverFacade.userNumbers(drawDate);
@@ -97,6 +99,49 @@ class NumberReceiverFacadeTest {
                         .drawDate(drawDate)
                         .numbers(result.ticketDto().numbers())
                         .build());
+    }
+
+    @Test
+    void shouldReturnCorrectHash(){
+
+        //given
+        Set<Integer> numbersFromUser = Set.of(1,2,3,4,5,6);
+
+        //when
+        String response = numberReceiverFacade.inputNumbers(numbersFromUser)
+                .ticketDto()
+                .hash()
+                .toString();
+
+        //then
+        assertThat(response).isNotNull();
+        assertThat(response).hasSize(36);
+
+    }
+
+    @Test
+    void ShouldReturnEmptyCollectionsIfGivenDataIsAfterNextDrawDate(){
+
+        //given
+        Clock clock =  Clock.fixed(LocalDateTime.of(2023, 9, 13, 10, 0, 0)
+                .toInstant(ZoneOffset.UTC), ZoneId.of("Europe/London"));
+        NumberReceiverFacade numberReceiverFacadeDraw = new NumberReceiverConfiguration().numberReceiverFacade(
+                new TicketRepositoryTestImpl(),
+                clock,
+                new HashGeneratorImpl(),
+                new ValidatorFacade(),
+                new DrawDateGeneratorFacade(clock)
+        );
+        NumberReceiverResponseDto numberReceiverResponseDto =
+                numberReceiverFacadeDraw.inputNumbers(Set.of(1,2,3,4,5,6));
+        LocalDateTime drawDate = numberReceiverResponseDto.ticketDto().drawDate();
+
+        //when
+       List<TicketDto> allTicketsByDate = numberReceiverFacadeDraw.userNumbers(drawDate.plusWeeks(1));
+
+       //then
+        assertThat(allTicketsByDate).isEmpty();
+
     }
 
 
