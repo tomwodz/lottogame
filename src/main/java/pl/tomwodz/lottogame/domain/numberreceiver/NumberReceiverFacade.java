@@ -8,13 +8,14 @@ import pl.tomwodz.lottogame.domain.validator.ValidatorFacade;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
 public class NumberReceiverFacade {
 
-    private final TicketRepository repository;
+    private final TicketRepository ticketRepository;
     private final Clock clock;
     private final HashGenerator hashGenerator;
     private final ValidatorFacade validatorFacade;
@@ -33,7 +34,7 @@ public class NumberReceiverFacade {
 
             Ticket ticketToSave = ticketFactory.mapFromTicketDtoToTicket(generatedTicket);
 
-            repository.save(ticketToSave);
+            ticketRepository.save(ticketToSave);
 
             return new NumberReceiverResponseDto(generatedTicket, "Success");
         }
@@ -41,9 +42,30 @@ public class NumberReceiverFacade {
     }
 
     public List<TicketDto> userNumbers(LocalDateTime date){
-        List<Ticket> allTicketsByDrawDate = repository.findAllTicketByDrawDate(date);
+        List<Ticket> allTicketsByDrawDate = ticketRepository.findAllTicketByDrawDate(date);
         return allTicketsByDrawDate.stream()
                 .map(TicketMapper::mapFromTicket)
+                .toList();
+    }
+
+    public List<TicketDto> retrieveAllTicketsByNextDrawDate() {
+        LocalDateTime nextDrawDate = drawDateGeneratorFacade.getNextDrawDate();
+        return retrieveAllTicketsByNextDrawDate(nextDrawDate);
+    }
+
+    public List<TicketDto> retrieveAllTicketsByNextDrawDate(LocalDateTime date) {
+        LocalDateTime nextDrawDate = drawDateGeneratorFacade.getNextDrawDate();
+        if (date.isAfter(nextDrawDate)) {
+            return Collections.emptyList();
+        }
+        return ticketRepository.findAllTicketByDrawDate(date)
+                .stream()
+                .filter(ticket -> ticket.drawDate().isEqual(date))
+                .map(ticket -> TicketDto.builder()
+                        .hash(ticket.hash())
+                        .numbers(ticket.numbers())
+                        .drawDate(ticket.drawDate())
+                        .build())
                 .toList();
     }
 

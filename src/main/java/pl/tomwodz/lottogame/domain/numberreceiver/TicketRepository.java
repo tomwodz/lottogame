@@ -7,4 +7,5 @@ public interface TicketRepository {
     Ticket save(Ticket ticket);
 
     List<Ticket> findAllTicketByDrawDate(LocalDateTime date);
+
 }
