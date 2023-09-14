@@ -5,6 +5,7 @@ import pl.tomwodz.lottogame.domain.AdjustableClock;
 import pl.tomwodz.lottogame.domain.drawdategenerator.DrawDateGeneratorFacade;
 import pl.tomwodz.lottogame.domain.numberreceiver.dto.NumberReceiverResponseDto;
 import pl.tomwodz.lottogame.domain.numberreceiver.dto.TicketDto;
+import pl.tomwodz.lottogame.domain.validator.ValidatorConfiguration;
 import pl.tomwodz.lottogame.domain.validator.ValidatorFacade;
 
 import java.time.Clock;
@@ -18,12 +19,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class NumberReceiverFacadeTest {
     AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023,9,7, 14, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
+    ValidatorFacade validatorFacade = new ValidatorConfiguration().validatorFacade();
 
     NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().numberReceiverFacade(
             new TicketRepositoryTestImpl(),
             clock,
             new HashGeneratorImpl(),
-            new ValidatorFacade(),
+            validatorFacade,
             new DrawDateGeneratorFacade(clock)
     );
 
@@ -129,7 +131,7 @@ class NumberReceiverFacadeTest {
                 new TicketRepositoryTestImpl(),
                 clock,
                 new HashGeneratorImpl(),
-                new ValidatorFacade(),
+                validatorFacade,
                 new DrawDateGeneratorFacade(clock)
         );
         NumberReceiverResponseDto numberReceiverResponseDto =
