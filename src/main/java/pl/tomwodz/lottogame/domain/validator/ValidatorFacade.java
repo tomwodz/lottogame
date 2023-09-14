@@ -1,21 +1,23 @@
 package pl.tomwodz.lottogame.domain.validator;
 
+import lombok.AllArgsConstructor;
+
 import java.util.Set;
 
+@AllArgsConstructor
 public class ValidatorFacade {
 
-    private static final int MAX_NUMBERS_FROM_USER = 6;
-    private static final int MINIMAL_NUMBER_FROM_USER = 1;
-    private static final int MAXIMAL_NUMBER_FROM_USER = 99;
+    private final ValidatorNumber validatorNumber;
+    private final ValidatorWinningNumbers validatorWinningNumbers;
+
 
     public boolean validationNumbers(Set<Integer> numbersFromUser){
-        return areAllNumbersInRange(numbersFromUser);
+        return validatorNumber.areAllNumbersInRange(numbersFromUser);
     }
 
-    public boolean areAllNumbersInRange(Set<Integer> numbersFromUser) {
-        return numbersFromUser.stream()
-                .filter(number -> number >= MINIMAL_NUMBER_FROM_USER)
-                .filter(number -> number <= MAXIMAL_NUMBER_FROM_USER)
-                .count() == MAX_NUMBERS_FROM_USER;
+    public Set<Integer> validationWinningNumbers(Set<Integer> winningNumbers){
+        return validatorWinningNumbers.validate(winningNumbers);
     }
+
+
 }
