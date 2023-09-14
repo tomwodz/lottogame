@@ -3,7 +3,7 @@ package pl.tomwodz.lottogame.domain.numbergenerator;
 import pl.tomwodz.lottogame.domain.drawdategenerator.DrawDateGeneratorFacade;
 import pl.tomwodz.lottogame.domain.validator.ValidatorFacade;
 
-public class NumberGeneratorConfiguration {
+class NumberGeneratorConfiguration {
 
     public NumberGeneratorFacade numberGeneratorFacade(DrawDateGeneratorFacade drawDateGeneratorFacade,
                                                        NumberRandomGeneratorRepository numberGeneratorRepository,
