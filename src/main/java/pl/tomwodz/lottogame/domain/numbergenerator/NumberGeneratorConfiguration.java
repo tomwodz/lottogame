@@ -1,7 +1,7 @@
 package pl.tomwodz.lottogame.domain.numbergenerator;
 
 import pl.tomwodz.lottogame.domain.drawdategenerator.DrawDateGeneratorFacade;
-import pl.tomwodz.lottogame.domain.numberclient.NumberClientFacade;
+import pl.tomwodz.lottogame.domain.numberclient.NumberClientQuery;
 import pl.tomwodz.lottogame.domain.validator.ValidatorFacade;
 
 class NumberGeneratorConfiguration {
@@ -10,10 +10,10 @@ class NumberGeneratorConfiguration {
                                                        NumberRandomGeneratorRepository numberGeneratorRepository,
                                                        ValidatorFacade validatorFacade,
                                                        WinningNumbersRepository winningNumbersRepository,
-                                                       NumberClientFacade numberClientFacade
+                                                       NumberClientQuery numberClientQuery
     ) {
         WinningNumbersFactory winningNumbersFactory = new WinningNumbersFactory();
         return new NumberGeneratorFacade(drawDateGeneratorFacade, numberGeneratorRepository, validatorFacade,
-                winningNumbersRepository, winningNumbersFactory, numberClientFacade);
+                winningNumbersRepository, winningNumbersFactory, numberClientQuery);
     }
 }

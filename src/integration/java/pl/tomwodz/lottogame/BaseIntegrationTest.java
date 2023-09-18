@@ -32,7 +32,7 @@ public class BaseIntegrationTest {
     public ObjectMapper objectMapper;
 
     @Container
-    public static  final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:6.0"));
+    public static  final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
 
     @RegisterExtension
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
@@ -42,6 +42,8 @@ public class BaseIntegrationTest {
     @DynamicPropertySource
     public static  void propertyOverride(DynamicPropertyRegistry registry){
         registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
+        registry.add("lottogame.numberclient.http.client.config.uri", () -> WIRE_MOCK_HOST);
+        registry.add("lottogame.numberclient.http.client.config.port", () -> wireMockServer.getPort());
     }
 
 }

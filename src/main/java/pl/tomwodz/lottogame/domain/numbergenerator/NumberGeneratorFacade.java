@@ -3,7 +3,7 @@ package pl.tomwodz.lottogame.domain.numbergenerator;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import pl.tomwodz.lottogame.domain.drawdategenerator.DrawDateGeneratorFacade;
-import pl.tomwodz.lottogame.domain.numberclient.NumberClientFacade;
+import pl.tomwodz.lottogame.domain.numberclient.NumberClientQuery;
 import pl.tomwodz.lottogame.domain.numberclient.dto.OutsideRandomNumbersResponseDto;
 import pl.tomwodz.lottogame.domain.numbergenerator.dto.WinningNumbersDto;
 import pl.tomwodz.lottogame.domain.validator.ValidatorFacade;
@@ -20,13 +20,13 @@ public class NumberGeneratorFacade {
     private final ValidatorFacade validatorFacade;
     private final WinningNumbersRepository winningNumbersRepository;
     private final WinningNumbersFactory winningNumbersFactory;
-    private final NumberClientFacade numberClientFacade;
+    private final NumberClientQuery numberClientQuery;
 
 
     public WinningNumbersDto generateWinningNumbers() {
         LocalDateTime nextDrawDate = drawDateGeneratorFacade.getNextDrawDate();
         try {
-            OutsideRandomNumbersResponseDto responseDto = numberClientFacade.getSixOutsideRandomNumbers();
+            OutsideRandomNumbersResponseDto responseDto = numberClientQuery.getSixOutsideRandomNumbers();
             validatorFacade.validationWinningNumbers(responseDto.outsideSixRandomNumbers());
             WinningNumbers winningOutsideNumbers = winningNumbersFactory
                     .mapFromOutsideRandomNumbersResponseDtoToWinningNumbers(responseDto.outsideSixRandomNumbers(), nextDrawDate);
