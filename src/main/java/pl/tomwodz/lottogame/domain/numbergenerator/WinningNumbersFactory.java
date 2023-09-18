@@ -13,4 +13,11 @@ class WinningNumbersFactory {
         );
     }
 
+    WinningNumbers mapFromOutsideRandomNumbersResponseDtoToWinningNumbers(Set<Integer> winningOutsideNumbers, LocalDateTime nextDrawDate){
+        return new WinningNumbers(
+                winningOutsideNumbers,
+                nextDrawDate
+        );
+    }
+
 }

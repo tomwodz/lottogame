@@ -2,6 +2,8 @@ package pl.tomwodz.lottogame.domain.numbergenerator;
 
 import org.junit.jupiter.api.Test;
 import pl.tomwodz.lottogame.domain.drawdategenerator.DrawDateGeneratorFacade;
+import pl.tomwodz.lottogame.domain.numberclient.NumberClientFacade;
+import pl.tomwodz.lottogame.domain.numberclient.dto.OutsideRandomNumbersResponseDto;
 import pl.tomwodz.lottogame.domain.numbergenerator.dto.WinningNumbersDto;
 import pl.tomwodz.lottogame.domain.validator.ValidatorFacade;
 
@@ -22,9 +24,10 @@ class NumberGeneratorFacadeTest {
 
     DrawDateGeneratorFacade drawDateGeneratorFacade = mock(DrawDateGeneratorFacade.class);
     ValidatorFacade validatorFacade = mock(ValidatorFacade.class);
+    NumberClientFacade numberClientFacade = mock(NumberClientFacade.class);
     NumberGeneratorFacade numberGeneratorFacade = new NumberGeneratorConfiguration()
             .numberGeneratorFacade(drawDateGeneratorFacade, numberRandomGeneratorRepository,
-                    validatorFacade, winningNumbersRepository);
+                    validatorFacade, winningNumbersRepository, numberClientFacade);
     @Test
     void ItShouldBeReturnWinningNumbersOfRequiredSize() {
 
@@ -66,7 +69,7 @@ class NumberGeneratorFacadeTest {
                 = new NumberRandomGeneratorRepositoryTestImpl(invalidNumbersOutOfRange);
         NumberGeneratorFacade numberGeneratorFacadeInvalidNumber = new NumberGeneratorConfiguration()
                 .numberGeneratorFacade(drawDateGeneratorFacade, repository,
-                        validatorFacade, winningNumbersRepository);
+                        validatorFacade, winningNumbersRepository, numberClientFacade);
 
         //when
         //then
@@ -119,7 +122,7 @@ class NumberGeneratorFacadeTest {
     }
 
     @Test
-    void IyShouldReturnWinningNumberByGivenDate() {
+    void ItShouldReturnWinningNumberByGivenDate() {
 
         //given
         LocalDateTime drawDate = LocalDateTime.of(2023, 9, 14, 12, 0, 0);
@@ -138,5 +141,24 @@ class NumberGeneratorFacadeTest {
                 .winningNumbers(generatedWinningNumbers)
                 .build();
         assertThat(expectedWinningNumbersDto).isEqualTo(winningNumbersDto);
+    }
+
+    @Test
+    void ShouldBeReturnOutsideRandomNumbersWhenNumberClientIsWorks() {
+
+        //given
+        LocalDateTime drawDate = LocalDateTime.of(2023, 9, 14, 12, 0, 0);
+        when(drawDateGeneratorFacade.getNextDrawDate()).thenReturn(drawDate);
+        OutsideRandomNumbersResponseDto outsideRandomNumbersResponseDto = OutsideRandomNumbersResponseDto
+                .builder()
+                .outsideSixRandomNumbers(Set.of(2,3,4,5,6,7))
+                .build();
+        when(numberClientFacade.getSixOutsideRandomNumbers()).thenReturn(outsideRandomNumbersResponseDto);
+
+        //when
+        WinningNumbersDto winningNumbersDto = numberGeneratorFacade.generateWinningNumbers();
+
+        //then
+        assertThat(winningNumbersDto.getWinningNumbers()).isEqualTo(outsideRandomNumbersResponseDto.outsideSixRandomNumbers());
     }
 }
