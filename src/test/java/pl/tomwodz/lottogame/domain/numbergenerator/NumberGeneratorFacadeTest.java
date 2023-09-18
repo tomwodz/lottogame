@@ -2,7 +2,7 @@ package pl.tomwodz.lottogame.domain.numbergenerator;
 
 import org.junit.jupiter.api.Test;
 import pl.tomwodz.lottogame.domain.drawdategenerator.DrawDateGeneratorFacade;
-import pl.tomwodz.lottogame.domain.numberclient.NumberClientFacade;
+import pl.tomwodz.lottogame.domain.numberclient.NumberClientQuery;
 import pl.tomwodz.lottogame.domain.numberclient.dto.OutsideRandomNumbersResponseDto;
 import pl.tomwodz.lottogame.domain.numbergenerator.dto.WinningNumbersDto;
 import pl.tomwodz.lottogame.domain.validator.ValidatorFacade;
@@ -24,10 +24,10 @@ class NumberGeneratorFacadeTest {
 
     DrawDateGeneratorFacade drawDateGeneratorFacade = mock(DrawDateGeneratorFacade.class);
     ValidatorFacade validatorFacade = mock(ValidatorFacade.class);
-    NumberClientFacade numberClientFacade = mock(NumberClientFacade.class);
+    NumberClientQuery numberClientQuery = mock(NumberClientQuery.class);
     NumberGeneratorFacade numberGeneratorFacade = new NumberGeneratorConfiguration()
             .numberGeneratorFacade(drawDateGeneratorFacade, numberRandomGeneratorRepository,
-                    validatorFacade, winningNumbersRepository, numberClientFacade);
+                    validatorFacade, winningNumbersRepository, numberClientQuery);
     @Test
     void ItShouldBeReturnWinningNumbersOfRequiredSize() {
 
@@ -69,7 +69,7 @@ class NumberGeneratorFacadeTest {
                 = new NumberRandomGeneratorRepositoryTestImpl(invalidNumbersOutOfRange);
         NumberGeneratorFacade numberGeneratorFacadeInvalidNumber = new NumberGeneratorConfiguration()
                 .numberGeneratorFacade(drawDateGeneratorFacade, repository,
-                        validatorFacade, winningNumbersRepository, numberClientFacade);
+                        validatorFacade, winningNumbersRepository, numberClientQuery);
 
         //when
         //then
@@ -153,7 +153,7 @@ class NumberGeneratorFacadeTest {
                 .builder()
                 .outsideSixRandomNumbers(Set.of(2,3,4,5,6,7))
                 .build();
-        when(numberClientFacade.getSixOutsideRandomNumbers()).thenReturn(outsideRandomNumbersResponseDto);
+        when(numberClientQuery.getSixOutsideRandomNumbers()).thenReturn(outsideRandomNumbersResponseDto);
 
         //when
         WinningNumbersDto winningNumbersDto = numberGeneratorFacade.generateWinningNumbers();
