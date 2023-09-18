@@ -1,5 +1,6 @@
 package pl.tomwodz.lottogame.infrastructure.numberclient;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,8 +28,11 @@ public class NumberClientConfig {
     }
 
     @Bean
-    public NumberClientQuery remoteNumberClientQueryRestTemplate(RestTemplate restTemplate) {
-        return new NumberClientRestTemplate(restTemplate);
+    public NumberClientQuery remoteNumberClientQueryRestTemplate(RestTemplate restTemplate,
+                                                                 @Value("${lottogame.numberclient.http.client.config.uri}") String uri,
+                                                                 @Value("${lottogame.numberclient.http.client.config.port}") int port
+                                                               ) {
+        return new NumberClientRestTemplate(restTemplate, uri, port);
     }
 
 }
