@@ -11,26 +11,6 @@ import java.util.Optional;
 public class ResultAnnouncerConfiguration {
 
     @Bean
-    ResultRepository resultRepository(){
-        return new ResultRepository() {
-            @Override
-            public ResultResponse save(ResultResponse resultResponse) {
-                return null;
-            }
-
-            @Override
-            public boolean existsById(String hash) {
-                return false;
-            }
-
-            @Override
-            public Optional<ResultResponse> findById(String hash) {
-                return Optional.empty();
-            }
-        };
-    }
-
-    @Bean
     public ResultAnnouncerFacade resultAnnouncerFacade (ResultRepository resultRepository, ResultCheckerFacade checkerFacade, Clock clock){
         ResultResponseFactory resultResponseFactory = new ResultResponseFactory();
         return new ResultAnnouncerFacade(clock, resultRepository, checkerFacade, resultResponseFactory);
