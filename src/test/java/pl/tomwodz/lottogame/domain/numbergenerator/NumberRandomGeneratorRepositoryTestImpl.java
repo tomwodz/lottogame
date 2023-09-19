@@ -1,5 +1,7 @@
 package pl.tomwodz.lottogame.domain.numbergenerator;
 
+import pl.tomwodz.lottogame.domain.numbergenerator.dto.CriteriaForGenerateNumbersConfigurationProperties;
+
 import java.util.Set;
 
 public class NumberRandomGeneratorRepositoryTestImpl implements NumberRandomGeneratorRepository{
@@ -14,7 +16,7 @@ public class NumberRandomGeneratorRepositoryTestImpl implements NumberRandomGene
         this.generatedNumbers = generatedNumbers;
     }
     @Override
-    public Set<Integer> generateSixRandomNumbers() {
+    public Set<Integer> generateSixRandomNumbers(CriteriaForGenerateNumbersConfigurationProperties criteria) {
         return generatedNumbers;
     }
 

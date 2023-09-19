@@ -1,31 +1,29 @@
 package pl.tomwodz.lottogame.domain.numbergenerator;
 
+import pl.tomwodz.lottogame.domain.numbergenerator.dto.CriteriaForGenerateNumbersConfigurationProperties;
+
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
 class NumberRandomGenerator implements NumberRandomGeneratorRepository {
 
-    private final int LOWER_BAND = 1;
-    private final int UPPER_BAND = 99;
-    private final int RANDOM_NUMBER_BOUND = (UPPER_BAND - LOWER_BAND) + 1;
-
-    public Set<Integer> generateSixRandomNumbers() {
+    public Set<Integer> generateSixRandomNumbers(CriteriaForGenerateNumbersConfigurationProperties criteria) {
         Set<Integer> winningNumbers = new HashSet<>();
-        while (isAmountOfNumbersLowerThanSix(winningNumbers)) {
-            int randomNumber = generateRandom();
+        while (isAmountOfNumbersLowerThanSix(winningNumbers, criteria.count())) {
+            int randomNumber = generateRandom(criteria.lowerBand(), criteria.upperBand());
             winningNumbers.add(randomNumber);
         }
         return winningNumbers;
     }
 
-    private boolean isAmountOfNumbersLowerThanSix(Set<Integer> winningNumbers) {
-        return winningNumbers.size() < 6;
+    private boolean isAmountOfNumbersLowerThanSix(Set<Integer> winningNumbers, int count) {
+        return winningNumbers.size() < count;
     }
 
-    private int generateRandom() {
+    private int generateRandom(int lowerBand, int upperBand) {
         Random random = new Random();
-        return random.nextInt(RANDOM_NUMBER_BOUND) +1;
+        return random.nextInt(lowerBand, upperBand + 1);
     }
 
 

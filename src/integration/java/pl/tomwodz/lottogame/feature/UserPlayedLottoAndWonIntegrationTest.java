@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import pl.tomwodz.lottogame.BaseIntegrationTest;
 import pl.tomwodz.lottogame.domain.numberclient.NumberClientQuery;
 import pl.tomwodz.lottogame.domain.numberclient.dto.OutsideRandomNumbersResponseDto;
+import pl.tomwodz.lottogame.domain.numbergenerator.dto.CriteriaForGenerateNumbersConfigurationProperties;
 
 import java.util.Set;
 
@@ -17,13 +18,19 @@ public class UserPlayedLottoAndWonIntegrationTest extends BaseIntegrationTest {
     @Autowired
     NumberClientQuery numberClientQuery;
 
+    @Autowired
+    CriteriaForGenerateNumbersConfigurationProperties criteria;
+
     @Test
     public void ShouldUserWinAndSystemShouldGenerateWinners() {
         //step 1: external service returns 6 random numbers (1,2,4,5,6)
 
         //given
         Set<Integer> expectedNumbers = Set.of(1,2,3,4,5,6);
-        wireMockServer.stubFor(WireMock.get("/api/v1.0/random?min=1&max=99&count=6")
+        wireMockServer.stubFor(WireMock.get("/api/v1.0/random?min="
+                        +criteria.lowerBand()+"&max="
+                        +criteria.upperBand()+"&count="
+                        +criteria.count())
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withHeader("Content-Type", "application/json")
@@ -33,7 +40,7 @@ public class UserPlayedLottoAndWonIntegrationTest extends BaseIntegrationTest {
                         )));
 
         //when
-        OutsideRandomNumbersResponseDto actual = numberClientQuery.getSixOutsideRandomNumbers();
+        OutsideRandomNumbersResponseDto actual = numberClientQuery.getSixOutsideRandomNumbers(criteria);
 
         //then
         assertThat(actual.outsideSixRandomNumbers().size()).isEqualTo(6);

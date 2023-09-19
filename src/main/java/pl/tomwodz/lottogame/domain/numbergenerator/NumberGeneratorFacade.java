@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import pl.tomwodz.lottogame.domain.drawdategenerator.DrawDateGeneratorFacade;
 import pl.tomwodz.lottogame.domain.numberclient.NumberClientQuery;
 import pl.tomwodz.lottogame.domain.numberclient.dto.OutsideRandomNumbersResponseDto;
+import pl.tomwodz.lottogame.domain.numbergenerator.dto.CriteriaForGenerateNumbersConfigurationProperties;
 import pl.tomwodz.lottogame.domain.numbergenerator.dto.WinningNumbersDto;
 import pl.tomwodz.lottogame.domain.validator.ValidatorFacade;
 
@@ -21,12 +22,13 @@ public class NumberGeneratorFacade {
     private final WinningNumbersRepository winningNumbersRepository;
     private final WinningNumbersFactory winningNumbersFactory;
     private final NumberClientQuery numberClientQuery;
+    private final CriteriaForGenerateNumbersConfigurationProperties criteria;
 
 
     public WinningNumbersDto generateWinningNumbers() {
         LocalDateTime nextDrawDate = drawDateGeneratorFacade.getNextDrawDate();
         try {
-            OutsideRandomNumbersResponseDto responseDto = numberClientQuery.getSixOutsideRandomNumbers();
+            OutsideRandomNumbersResponseDto responseDto = numberClientQuery.getSixOutsideRandomNumbers(criteria);
             validatorFacade.validationWinningNumbers(responseDto.outsideSixRandomNumbers());
             WinningNumbers winningOutsideNumbers = winningNumbersFactory
                     .mapFromOutsideRandomNumbersResponseDtoToWinningNumbers(responseDto.outsideSixRandomNumbers(), nextDrawDate);
@@ -36,7 +38,7 @@ public class NumberGeneratorFacade {
         catch (Exception e){
             log.warn("numberClientFacade error");
         }
-        Set<Integer> winningGenerateNumbers = numberGeneratorRepository.generateSixRandomNumbers();
+        Set<Integer> winningGenerateNumbers = numberGeneratorRepository.generateSixRandomNumbers(criteria);
         validatorFacade.validationWinningNumbers(winningGenerateNumbers);
         WinningNumbers winningNumbers = winningNumbersFactory
                 .mapFromWinningNumbersDtoToWinningNumbers(winningGenerateNumbers, nextDrawDate);
