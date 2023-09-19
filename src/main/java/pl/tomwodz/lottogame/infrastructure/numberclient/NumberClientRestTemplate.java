@@ -54,7 +54,7 @@ public class NumberClientRestTemplate implements NumberClientQuery {
         final String url = UriComponentsBuilder.fromHttpUrl(getUrlForService(RANDOM_NUMBER_SERVICE_PATH))
                 .queryParam("min", criteria.lowerBand())
                 .queryParam("max", criteria.upperBand())
-                .queryParam("count", criteria.count())
+                .queryParam("count", criteria.countOut())
                 .toUriString();
         ResponseEntity<List<Integer>> response = restTemplate.exchange(
                 url,

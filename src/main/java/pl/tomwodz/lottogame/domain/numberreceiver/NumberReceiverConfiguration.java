@@ -1,12 +1,39 @@
 package pl.tomwodz.lottogame.domain.numberreceiver;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import pl.tomwodz.lottogame.domain.drawdategenerator.DrawDateGeneratorFacade;
 import pl.tomwodz.lottogame.domain.validator.ValidatorFacade;
 
 import java.time.Clock;
+import java.time.LocalDateTime;
+import java.util.List;
 
+@Configuration
 class NumberReceiverConfiguration {
 
+    @Bean
+    HashGenerator hashGenerator(){
+        return new HashGeneratorImpl();
+    }
+
+    @Bean
+    TicketRepository ticketRepository(){
+        return new TicketRepository() {
+            @Override
+            public Ticket save(Ticket ticket) {
+                return null;
+            }
+
+            @Override
+            public List<Ticket> findAllTicketByDrawDate(LocalDateTime date) {
+                return null;
+            }
+        };
+    }
+
+    @Bean
     NumberReceiverFacade numberReceiverFacade (TicketRepository ticketRepository,
                                                Clock clock,
                                                HashGenerator hashGenerator,

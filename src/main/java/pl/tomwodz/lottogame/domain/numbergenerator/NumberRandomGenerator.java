@@ -1,11 +1,13 @@
 package pl.tomwodz.lottogame.domain.numbergenerator;
 
+import org.springframework.stereotype.Component;
 import pl.tomwodz.lottogame.domain.numbergenerator.dto.CriteriaForGenerateNumbersConfigurationProperties;
 
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+@Component
 class NumberRandomGenerator implements NumberRandomGeneratorRepository {
 
     public Set<Integer> generateSixRandomNumbers(CriteriaForGenerateNumbersConfigurationProperties criteria) {
