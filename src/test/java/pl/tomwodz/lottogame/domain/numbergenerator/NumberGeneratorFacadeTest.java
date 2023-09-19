@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import pl.tomwodz.lottogame.domain.drawdategenerator.DrawDateGeneratorFacade;
 import pl.tomwodz.lottogame.domain.numberclient.NumberClientQuery;
 import pl.tomwodz.lottogame.domain.numberclient.dto.OutsideRandomNumbersResponseDto;
+import pl.tomwodz.lottogame.domain.numbergenerator.dto.CriteriaForGenerateNumbersConfigurationProperties;
 import pl.tomwodz.lottogame.domain.numbergenerator.dto.WinningNumbersDto;
 import pl.tomwodz.lottogame.domain.validator.ValidatorFacade;
 
@@ -13,7 +14,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -25,9 +27,11 @@ class NumberGeneratorFacadeTest {
     DrawDateGeneratorFacade drawDateGeneratorFacade = mock(DrawDateGeneratorFacade.class);
     ValidatorFacade validatorFacade = mock(ValidatorFacade.class);
     NumberClientQuery numberClientQuery = mock(NumberClientQuery.class);
+
+    CriteriaForGenerateNumbersConfigurationProperties criteria;
     NumberGeneratorFacade numberGeneratorFacade = new NumberGeneratorConfiguration()
             .numberGeneratorFacade(drawDateGeneratorFacade, numberRandomGeneratorRepository,
-                    validatorFacade, winningNumbersRepository, numberClientQuery);
+                    validatorFacade, winningNumbersRepository, numberClientQuery, criteria);
     @Test
     void ItShouldBeReturnWinningNumbersOfRequiredSize() {
 
@@ -69,7 +73,7 @@ class NumberGeneratorFacadeTest {
                 = new NumberRandomGeneratorRepositoryTestImpl(invalidNumbersOutOfRange);
         NumberGeneratorFacade numberGeneratorFacadeInvalidNumber = new NumberGeneratorConfiguration()
                 .numberGeneratorFacade(drawDateGeneratorFacade, repository,
-                        validatorFacade, winningNumbersRepository, numberClientQuery);
+                        validatorFacade, winningNumbersRepository, numberClientQuery, criteria);
 
         //when
         //then
@@ -153,7 +157,7 @@ class NumberGeneratorFacadeTest {
                 .builder()
                 .outsideSixRandomNumbers(Set.of(2,3,4,5,6,7))
                 .build();
-        when(numberClientQuery.getSixOutsideRandomNumbers()).thenReturn(outsideRandomNumbersResponseDto);
+        when(numberClientQuery.getSixOutsideRandomNumbers(criteria)).thenReturn(outsideRandomNumbersResponseDto);
 
         //when
         WinningNumbersDto winningNumbersDto = numberGeneratorFacade.generateWinningNumbers();

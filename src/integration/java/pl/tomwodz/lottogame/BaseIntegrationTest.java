@@ -15,6 +15,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import pl.tomwodz.lottogame.infrastructure.numberclient.NumberClientRestTemplateConfigurationProperties;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
@@ -42,8 +43,8 @@ public class BaseIntegrationTest {
     @DynamicPropertySource
     public static  void propertyOverride(DynamicPropertyRegistry registry){
         registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-        registry.add("lottogame.numberclient.http.client.config.uri", () -> WIRE_MOCK_HOST);
-        registry.add("lottogame.numberclient.http.client.config.port", () -> wireMockServer.getPort());
+        registry.add("lotto-game.number-client.http.client.config.uri", () -> WIRE_MOCK_HOST);
+        registry.add("lotto-game.number-client.http.client.config.port", () -> wireMockServer.getPort());
     }
 
 }

@@ -3,10 +3,18 @@ spring:
     mongodb:
       uri: mongodb://tomwodz:tomwodz@localhost:27017/mongo_lottogame
 
-lottogame:
-  numberclient:
+
+lotto-game:
+  number-client:
     http:
       client:
         config:
-          uri:http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com
-          port:9090
+          uri: http://ec2-3-120-147-150.eu-central-1.compute.amazonaws.com
+          port: 9090
+          connectionTimeout: 2000
+          readTimeout: 2000
+  number-generator:
+    criteria:
+      count: 6
+      lowerBand: 1
+      upperBand: 99
