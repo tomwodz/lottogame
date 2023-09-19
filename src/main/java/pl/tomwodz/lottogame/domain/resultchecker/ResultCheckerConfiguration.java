@@ -12,21 +12,6 @@ import java.util.Optional;
  class ResultCheckerConfiguration {
 
     @Bean
-    PlayerRepository playerRepository(){
-        return new PlayerRepository() {
-            @Override
-            public List<Player> saveAll(List<Player> players) {
-                return null;
-            }
-
-            @Override
-            public Optional<Player> findById(String hash) {
-                return Optional.empty();
-            }
-        };
-    }
-
-    @Bean
     public ResultCheckerFacade resultCheckerFacade(NumberReceiverFacade numberReceiverFacade,
                                             NumberGeneratorFacade numberGeneratorFacade,
                                             PlayerRepository playerRepository){

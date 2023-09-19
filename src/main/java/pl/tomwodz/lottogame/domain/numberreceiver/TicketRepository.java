@@ -7,8 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface TicketRepository extends MongoRepository<Ticket, Long> {
-    //Ticket save(Ticket ticket);
+interface TicketRepository extends MongoRepository<Ticket, Long> {
 
     List<Ticket> findAllTicketByDrawDate(LocalDateTime date);
 

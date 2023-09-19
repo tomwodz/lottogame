@@ -9,7 +9,6 @@ import java.util.Optional;
 @Repository
 public interface ResultRepository extends MongoRepository<ResultResponse, String> {
 
-    //ResultResponse save(ResultResponse resultResponse);
     boolean existsById(String hash);
 
     Optional<ResultResponse> findById(String hash);
