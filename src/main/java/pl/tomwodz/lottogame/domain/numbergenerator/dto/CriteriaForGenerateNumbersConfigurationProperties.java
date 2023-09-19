@@ -8,6 +8,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record CriteriaForGenerateNumbersConfigurationProperties(
         int count,
         int lowerBand,
-        int upperBand
+        int upperBand,
+
+        int countOut
 ) {
 }

@@ -1,6 +1,7 @@
 package pl.tomwodz.lottogame.domain.drawdategenerator;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.time.Clock;
 import java.time.DayOfWeek;
@@ -9,6 +10,7 @@ import java.time.LocalTime;
 import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 @AllArgsConstructor
+@Component
 public class DrawDateGeneratorFacade {
 
     private final Clock clock;
