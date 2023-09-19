@@ -19,4 +19,4 @@ lotto-game:
       lowerBand: 1
       upperBand: 99
       countOut: 25
-    lotteryRunOccurrence: "0 0 12 * * 6"
+    lotteryRunOccurrence: "* 0 12 * * 6"

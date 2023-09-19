@@ -45,11 +45,11 @@ public class UserPlayedLottoAndWonIntegrationTest extends BaseIntegrationTest {
 
         //given
         //step 2: system generated winning numbers for draw date: 19.11.2022 12:00
-        LocalDateTime drawDate = LocalDateTime.of(2022,11,19,12,0,0);
+        LocalDateTime drawDate = LocalDateTime.of(2023,9,23,12,0,0);
 
         //when
         await()
-                .atMost(Duration.ofSeconds(20))
+                .atMost(Duration.ofSeconds(10))
                 .pollInterval(Duration.ofSeconds(1))
                 .until(() -> {
                             try {

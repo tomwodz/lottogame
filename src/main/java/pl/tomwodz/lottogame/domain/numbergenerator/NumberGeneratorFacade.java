@@ -51,7 +51,7 @@ public class NumberGeneratorFacade {
     }
 
     public WinningNumbersDto retrieveWinningNumberByDate(LocalDateTime date) {
-        WinningNumbers numbersByDate = winningNumbersRepository.findByDate(date)
+        WinningNumbers numbersByDate = winningNumbersRepository.findWinningNumbersByDate(date)
                 .orElseThrow(() -> new WinningNumbersNotFoundException("Not Found"));
         return NumberGeneratorMapper.mapFromWinningNumbersToWinningNumbersDto(numbersByDate);
     }
