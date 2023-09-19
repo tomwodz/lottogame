@@ -2,7 +2,8 @@ spring:
   data:
     mongodb:
       uri: mongodb://tomwodz:tomwodz@localhost:27017/mongo_lottogame
-
+  main:
+    allow-bean-definition-overriding: true
 
 lotto-game:
   number-client:
@@ -19,4 +20,4 @@ lotto-game:
       lowerBand: 1
       upperBand: 99
       countOut: 25
-    lotteryRunOccurrence: "* 0 12 * * 6"
+    lotteryRunOccurrence: "0/30 * * * * *"

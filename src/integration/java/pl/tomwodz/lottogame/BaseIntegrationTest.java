@@ -1,7 +1,7 @@
 package pl.tomwodz.lottogame;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,12 +14,11 @@ import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import pl.tomwodz.lottogame.infrastructure.numberclient.NumberClientRestTemplateConfigurationProperties;
+import pl.tomwodz.lottogame.domain.AdjustableClock;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
-@SpringBootTest(classes = LottoGameApplication.class)
+@SpringBootTest(classes = {LottoGameApplication.class, IntegrationConfiguration.class})
 @ActiveProfiles("integration")
 @AutoConfigureMockMvc
 @Testcontainers
@@ -31,6 +30,9 @@ public class BaseIntegrationTest {
 
     @Autowired
     public ObjectMapper objectMapper;
+
+    @Autowired
+    public AdjustableClock clock;
 
     @Container
     public static  final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
