@@ -9,8 +9,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
-@AllArgsConstructor
+
 @Component
+@AllArgsConstructor
 public class DrawDateGeneratorFacade {
 
     private final Clock clock;

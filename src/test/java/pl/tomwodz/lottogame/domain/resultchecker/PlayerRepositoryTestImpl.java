@@ -11,10 +11,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class PlayerRepositoryTestImpl implements PlayerRepository{
 
-    Map<String, Player> inMemoryDatabase = new ConcurrentHashMap<>();
+    private final Map<String, Player> inMemoryDatabase = new ConcurrentHashMap<>();
 
     @Override
     public Optional<Player> findById(String hash) {
@@ -22,9 +24,11 @@ public class PlayerRepositoryTestImpl implements PlayerRepository{
     }
 
     @Override
-    public List<Player> saveAll(List<Player> players) {
-        players.forEach(player -> inMemoryDatabase.put(player.hash(), player));
-        return players;
+    public <S extends Player> List<S> saveAll(Iterable<S> entities) {
+        Stream<S> stream = StreamSupport.stream(entities.spliterator(), false);
+        List<S> list = stream.toList();
+        list.forEach(player -> inMemoryDatabase.put(player.hash(), player));
+        return list;
     }
 
     @Override
@@ -44,11 +48,6 @@ public class PlayerRepositoryTestImpl implements PlayerRepository{
 
     @Override
     public <S extends Player> List<S> findAll(Example<S> example, Sort sort) {
-        return null;
-    }
-
-    @Override
-    public <S extends Player> List<S> saveAll(Iterable<S> entities) {
         return null;
     }
 

@@ -13,6 +13,7 @@ import java.util.List;
 @Configuration
 class NumberReceiverConfiguration {
 
+
     @Bean
     HashGenerator hashGenerator(){
         return new HashGeneratorImpl();
