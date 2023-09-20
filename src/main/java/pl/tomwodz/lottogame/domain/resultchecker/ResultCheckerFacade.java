@@ -5,6 +5,7 @@ import pl.tomwodz.lottogame.domain.numbergenerator.NumberGeneratorFacade;
 import pl.tomwodz.lottogame.domain.numbergenerator.dto.WinningNumbersDto;
 import pl.tomwodz.lottogame.domain.numberreceiver.NumberReceiverFacade;
 import pl.tomwodz.lottogame.domain.numberreceiver.dto.TicketDto;
+import pl.tomwodz.lottogame.domain.resultannouncer.ResultResponseNotFoundException;
 import pl.tomwodz.lottogame.domain.resultchecker.dto.PlayersDto;
 import pl.tomwodz.lottogame.domain.resultchecker.dto.ResultDto;
 
@@ -41,7 +42,8 @@ public class ResultCheckerFacade {
     }
 
     public ResultDto findByHash(String hash) {
-        Player player = playerRepository.findById(hash).orElseThrow(() -> new RuntimeException("Not found"));
+        Player player = playerRepository.findById(hash)
+                .orElseThrow(() -> new PlayerResultNotFoundException("Not found for id: " + hash));
         return resultFactory.mapFromPlayerToResultDto(hash, player);
     }
 
