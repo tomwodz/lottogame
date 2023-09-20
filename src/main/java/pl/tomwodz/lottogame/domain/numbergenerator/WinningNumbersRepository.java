@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Repository
-public interface WinningNumbersRepository extends MongoRepository<WinningNumbers, Long> {
+public interface WinningNumbersRepository extends MongoRepository<WinningNumbers, String> {
 
     Optional<WinningNumbers> findWinningNumbersByDate(LocalDateTime localDateTime);
     boolean existsByDate(LocalDateTime localDateTime);

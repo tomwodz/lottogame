@@ -2,7 +2,6 @@ package pl.tomwodz.lottogame;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import pl.tomwodz.lottogame.domain.AdjustableClock;
 
@@ -14,7 +13,6 @@ import java.time.ZoneId;
 @Profile("integration")
 public class IntegrationConfiguration {
     @Bean
-    @Primary
     AdjustableClock clock(){
         return AdjustableClock.ofLocalDateAndLocalTime(
                 LocalDate.of(2022,11,16),

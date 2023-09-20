@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import pl.tomwodz.lottogame.domain.resultchecker.ResultCheckerFacade;
 
 import java.time.Clock;
-import java.util.Optional;
 
 @Configuration
 public class ResultAnnouncerConfiguration {

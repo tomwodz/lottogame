@@ -2,6 +2,13 @@ spring:
   data:
     mongodb:
       uri: mongodb://tomwodz:tomwodz@localhost:27017/mongo_lottogame
+      config:
+        enabled: true
+        write:
+          writeConcern:
+            isMajority: true
+          timeout:
+            milliseconds: 30000
   main:
     allow-bean-definition-overriding: true
 
@@ -20,4 +27,4 @@ lotto-game:
       lowerBand: 1
       upperBand: 99
       countOut: 25
-    lotteryRunOccurrence: "0/30 * * * * *"
+    lotteryRunOccurrence: "0 0 12 * * 6"

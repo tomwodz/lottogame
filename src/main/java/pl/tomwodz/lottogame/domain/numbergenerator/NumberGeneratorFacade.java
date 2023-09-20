@@ -27,6 +27,8 @@ public class NumberGeneratorFacade {
 
     public WinningNumbersDto generateWinningNumbers() {
         LocalDateTime nextDrawDate = drawDateGeneratorFacade.getNextDrawDate();
+        int counter = 0;
+        do {
         try {
             OutsideRandomNumbersResponseDto responseDto = numberClientQuery.getSixOutsideRandomNumbers(criteria);
             validatorFacade.validationWinningNumbers(responseDto.outsideSixRandomNumbers());
@@ -36,8 +38,10 @@ public class NumberGeneratorFacade {
             return NumberGeneratorMapper.mapFromWinningNumbersToWinningNumbersDto(winningNumbersSaved);
         }
         catch (Exception e){
-            log.warn("numberClientFacade error");
-        }
+            log.warn("NumberClientFacade error");
+            ++counter;
+        } }
+        while (counter < 3);
         Set<Integer> winningGenerateNumbers = numberGeneratorRepository.generateSixRandomNumbers(criteria);
         validatorFacade.validationWinningNumbers(winningGenerateNumbers);
         WinningNumbers winningNumbers = winningNumbersFactory
@@ -47,7 +51,12 @@ public class NumberGeneratorFacade {
     }
 
     private WinningNumbers saveWinningNumber(WinningNumbers winningNumbers){
-        return winningNumbersRepository.save(winningNumbers);
+        if(!this.winningNumbersRepository.existsByDate(winningNumbers.getDate())){
+            return winningNumbersRepository.save(winningNumbers);
+        }
+        log.error("DrawDate is already exists in database.");
+        return winningNumbersRepository.findWinningNumbersByDate(winningNumbers.getDate())
+                .orElseThrow(() -> new WinningNumbersNotFoundException("Not Found"));
     }
 
     public WinningNumbersDto retrieveWinningNumberByDate(LocalDateTime date) {
