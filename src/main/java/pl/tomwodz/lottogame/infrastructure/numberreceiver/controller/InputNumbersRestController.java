@@ -1,4 +1,4 @@
-package pl.tomwodz.lottogame.infrastructure.numberreceiver;
+package pl.tomwodz.lottogame.infrastructure.numberreceiver.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;

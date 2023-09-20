@@ -1,4 +1,4 @@
-package pl.tomwodz.lottogame.infrastructure.numberreceiver;
+package pl.tomwodz.lottogame.infrastructure.numberreceiver.controller;
 
 import java.util.List;
 
