@@ -1,14 +1,12 @@
-package pl.tomwodz.lottogame.infrastructure.numberclient;
+package pl.tomwodz.lottogame.infrastructure.numberclient.http;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.tomwodz.lottogame.domain.numberclient.NumberClientQuery;
 import pl.tomwodz.lottogame.domain.numberclient.dto.OutsideRandomNumbersResponseDto;
@@ -39,11 +37,9 @@ public class NumberClientRestTemplate implements NumberClientQuery {
                     .outsideSixRandomNumbers(verifiedResponse)
                     .build();
         }
-    catch (ResourceAccessException e) {
+    catch (ResourceAccessException | IllegalArgumentException e) {
         log.error("Error connecting to outside client " + e.getMessage());
-        return OutsideRandomNumbersResponseDto.builder()
-                .outsideSixRandomNumbers(Collections.emptySet())
-                .build();
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     }
@@ -69,7 +65,7 @@ public class NumberClientRestTemplate implements NumberClientQuery {
         List<Integer> numbers = response.getBody();
         if (numbers == null) {
             log.error("Response Body was null returning empty collection");
-            return Collections.emptySet();
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         }
         Set<Integer> verifiedSet = numbers.stream()
                 .distinct()
