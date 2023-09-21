@@ -2,4 +2,4 @@ lotto-game:
   number-generator:
     lotteryRunOccurrence: "*/3 * * * * *"
   result-checker:
-    lotteryRunOccurrence: "*/5 * * * * *"
+    lotteryRunOccurrence: "*/9 * * * * *"
