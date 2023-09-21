@@ -1,7 +1,5 @@
-package pl.tomwodz.lottogame.infrastructure.numberclient;
+package pl.tomwodz.lottogame.infrastructure.numberclient.http;
 
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import pl.tomwodz.lottogame.domain.numbergenerator.dto.CriteriaForGenerateNumbersConfigurationProperties;
-import pl.tomwodz.lottogame.infrastructure.numberclient.NumberClientRestTemplateConfigurationProperties;
+import pl.tomwodz.lottogame.infrastructure.numberclient.http.NumberClientRestTemplateConfigurationProperties;
 
 @SpringBootApplication
 @EnableConfigurationProperties({

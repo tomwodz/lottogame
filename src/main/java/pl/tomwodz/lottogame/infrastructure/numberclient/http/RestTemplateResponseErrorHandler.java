@@ -1,4 +1,4 @@
-package pl.tomwodz.lottogame.infrastructure.numberclient;
+package pl.tomwodz.lottogame.infrastructure.numberclient.http;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;

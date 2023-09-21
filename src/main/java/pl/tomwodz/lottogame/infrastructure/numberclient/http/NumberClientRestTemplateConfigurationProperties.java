@@ -1,4 +1,4 @@
-package pl.tomwodz.lottogame.infrastructure.numberclient;
+package pl.tomwodz.lottogame.infrastructure.numberclient.http;
 
 import lombok.Builder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
