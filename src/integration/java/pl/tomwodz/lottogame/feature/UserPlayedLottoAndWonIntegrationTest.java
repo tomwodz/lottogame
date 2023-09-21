@@ -1,5 +1,6 @@
 package pl.tomwodz.lottogame.feature;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import pl.tomwodz.lottogame.domain.numbergenerator.NumberGeneratorFacade;
 import pl.tomwodz.lottogame.domain.numbergenerator.WinningNumbersNotFoundException;
 import pl.tomwodz.lottogame.domain.numbergenerator.dto.CriteriaForGenerateNumbersConfigurationProperties;
 import pl.tomwodz.lottogame.domain.numberreceiver.dto.NumberReceiverResponseDto;
+import pl.tomwodz.lottogame.domain.resultannouncer.dto.ResultResponseDto;
 import pl.tomwodz.lottogame.domain.resultchecker.PlayerResultNotFoundException;
 import pl.tomwodz.lottogame.domain.resultchecker.ResultCheckerFacade;
 import pl.tomwodz.lottogame.domain.resultchecker.dto.ResultDto;
@@ -21,6 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -130,6 +133,9 @@ public class UserPlayedLottoAndWonIntegrationTest extends BaseIntegrationTest {
         clock.plusDaysAndMinutes(3,55);
 
         //step 6: system generated result for TicketId: sampleTicketId with draw date 19.11.2022 12:00, and saved it with 6 hits
+        //given
+        //when
+        //then
         await().atMost(20, TimeUnit.SECONDS)
                 .pollInterval(Duration.ofSeconds(1L))
                 .until(
@@ -143,15 +149,26 @@ public class UserPlayedLottoAndWonIntegrationTest extends BaseIntegrationTest {
                         }
                 );
 
+        //step 7: 3 hours passed, and it is 1 minute after announcement time (19.11.2022 15:01)
+        //given
+        //when
+        //then
+        clock.plusDaysAndMinutes(3,1);
+
+        //step 8: user made GET /results/sampleTicketId and system returned 200 (OK)
+        //given
+        //when
+        ResultActions performGetResultsWithExistsTicketId = mockMvc.perform(get("/results/" + tickedId));
+
+        //then
+        MvcResult mvcResultWithExistsTicketId = performGetResultsWithExistsTicketId.andExpect(status().isOk())
+                .andReturn();
+        String responseResultWithExistsTicketId = mvcResultWithExistsTicketId
+                .getResponse()
+                .getContentAsString();
+        ResultResponseDto resultStep7 = objectMapper.readValue(responseResultWithExistsTicketId,  new TypeReference<>() {});
+        assertAll(
+                () -> assertThat(resultStep7.responseDto().hash()).isEqualTo(tickedId)
+        );
     }
-
-
-
-
-
-
-
-//step 7: 3 hours passed, and it is 1 minute after announcement time (19.11.2022 15:01)
-//step 8: user made GET /results/sampleTicketId and system returned 200 (OK)
-
 }

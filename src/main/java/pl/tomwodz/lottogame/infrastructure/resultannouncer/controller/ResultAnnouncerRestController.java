@@ -16,11 +16,9 @@ import pl.tomwodz.lottogame.domain.resultchecker.ResultCheckerFacade;
 public class ResultAnnouncerRestController {
 
     private final ResultAnnouncerFacade resultAnnouncerFacade;
-    private final ResultCheckerFacade checkerFacade;
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<ResultResponseDto> checkResultById(@PathVariable String id) {
-        //checkerFacade.generateWinners();
         return ResponseEntity.ok(this.resultAnnouncerFacade.checkResult(id));
     }
 }
