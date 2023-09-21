@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -35,7 +34,7 @@ class ResultCheckerFacadeTest {
                 .build());
 
         //when
-        PlayersDto playersDto = resultCheckerFacade.generateWinners();
+        PlayersDto playersDto = resultCheckerFacade.generateResults();
 
         //then
         String message = playersDto.message();
@@ -52,7 +51,7 @@ class ResultCheckerFacadeTest {
                 .build());
 
         //when
-        PlayersDto playersDto = resultCheckerFacade.generateWinners();
+        PlayersDto playersDto = resultCheckerFacade.generateResults();
 
         //then
         String message = playersDto.message();
@@ -70,7 +69,7 @@ class ResultCheckerFacadeTest {
                 .build());
 
         //when
-        PlayersDto playersDto = resultCheckerFacade.generateWinners();
+        PlayersDto playersDto = resultCheckerFacade.generateResults();
 
         //then
         String message = playersDto.message();
@@ -106,8 +105,8 @@ class ResultCheckerFacadeTest {
         );
 
         //when
-        resultCheckerFacade.generateWinners();
-        ResultDto resultDto = resultCheckerFacade.findByHash(hash);
+        resultCheckerFacade.generateResults();
+        ResultDto resultDto = resultCheckerFacade.findByTicketId(hash);
 
 
         //then
@@ -147,7 +146,7 @@ class ResultCheckerFacadeTest {
         );
         //when
 
-        PlayersDto playersDto = resultCheckerFacade.generateWinners();
+        PlayersDto playersDto = resultCheckerFacade.generateResults();
 
         //then
         List<ResultDto> results = playersDto.results();

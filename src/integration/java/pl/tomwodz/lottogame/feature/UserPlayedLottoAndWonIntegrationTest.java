@@ -13,10 +13,15 @@ import pl.tomwodz.lottogame.domain.numbergenerator.NumberGeneratorFacade;
 import pl.tomwodz.lottogame.domain.numbergenerator.WinningNumbersNotFoundException;
 import pl.tomwodz.lottogame.domain.numbergenerator.dto.CriteriaForGenerateNumbersConfigurationProperties;
 import pl.tomwodz.lottogame.domain.numberreceiver.dto.NumberReceiverResponseDto;
+import pl.tomwodz.lottogame.domain.resultchecker.PlayerResultNotFoundException;
+import pl.tomwodz.lottogame.domain.resultchecker.ResultCheckerFacade;
+import pl.tomwodz.lottogame.domain.resultchecker.dto.ResultDto;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
@@ -33,6 +38,9 @@ public class UserPlayedLottoAndWonIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     NumberGeneratorFacade numberGeneratorFacade;
+
+    @Autowired
+    ResultCheckerFacade resultCheckerFacade;
 
     @Autowired
     CriteriaForGenerateNumbersConfigurationProperties criteria;
@@ -91,9 +99,10 @@ public class UserPlayedLottoAndWonIntegrationTest extends BaseIntegrationTest {
         MvcResult mvcResultStep3 = performPostInputNumbers.andExpect(status().isOk()).andReturn();
         String response = mvcResultStep3.getResponse().getContentAsString();
         NumberReceiverResponseDto numberReceiverResponseDto = objectMapper.readValue(response, NumberReceiverResponseDto.class);
+        String tickedId = numberReceiverResponseDto.ticketDto().hash();
         assertAll(
                 () -> assertThat(numberReceiverResponseDto.ticketDto().drawDate()).isEqualTo(drawDate),
-                () ->  assertThat(numberReceiverResponseDto.ticketDto().hash()).isNotNull(),
+                () ->  assertThat(tickedId).isNotNull(),
                 () ->  assertThat(numberReceiverResponseDto.message()).isEqualTo("Success")
         );
 
@@ -102,20 +111,37 @@ public class UserPlayedLottoAndWonIntegrationTest extends BaseIntegrationTest {
         //when
         ResultActions performGetResultsWithNotExistingId = mockMvc.perform(get("/results/" + "notExistingId"));
         //then
-        performGetResultsWithNotExistingId.andExpect(status().isNotFound());
-/*                .andExpect(content().json(
+        performGetResultsWithNotExistingId.andExpect(status().isNotFound())
+                .andExpect(content().json(
                         """
                                 {
                                 "message": "Not found for id: notExistingId",
-                                "status": "NOT_FOUND"
+                                "httpStatus": "NOT_FOUND"
                                 }
                                 """.trim()
-                ));*/
+                ));
 
 
 
         //step 5: 3 days and 1 minute passed, and it is 1 minute after the draw date (19.11.2022 12:01)
-        //clock.plusDaysAndMinutes(3,1);
+        //given
+        //when
+        //then
+        clock.plusDaysAndMinutes(3,55);
+
+        //step 6: system generated result for TicketId: sampleTicketId with draw date 19.11.2022 12:00, and saved it with 6 hits
+        await().atMost(20, TimeUnit.SECONDS)
+                .pollInterval(Duration.ofSeconds(1L))
+                .until(
+                        () -> {
+                            try {
+                                ResultDto resultDto = resultCheckerFacade.findByTicketId(tickedId);
+                                return !resultDto.numbers().isEmpty();
+                            } catch (PlayerResultNotFoundException exception){
+                                return false;
+                            }
+                        }
+                );
 
     }
 
@@ -124,7 +150,7 @@ public class UserPlayedLottoAndWonIntegrationTest extends BaseIntegrationTest {
 
 
 
-//step 6: system generated result for TicketId: sampleTicketId with draw date 19.11.2022 12:00, and saved it with 6 hits
+
 //step 7: 3 hours passed, and it is 1 minute after announcement time (19.11.2022 15:01)
 //step 8: user made GET /results/sampleTicketId and system returned 200 (OK)
 
