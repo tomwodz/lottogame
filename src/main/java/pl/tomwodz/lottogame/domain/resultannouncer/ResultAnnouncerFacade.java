@@ -8,7 +8,6 @@ import pl.tomwodz.lottogame.domain.resultchecker.dto.ResultDto;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Optional;
 
 import static pl.tomwodz.lottogame.domain.resultannouncer.MessageResponse.*;
@@ -17,7 +16,6 @@ import static pl.tomwodz.lottogame.domain.resultannouncer.MessageResponse.*;
 public class ResultAnnouncerFacade {
 
 
-    public static final LocalTime RESULTS_ANNOUNCEMENT_TIME = LocalTime.of(12, 0).plusMinutes(5);
     private final Clock clock;
     private final ResultRepository resultRepository;
     private final ResultCheckerFacade checkerFacade;
@@ -31,7 +29,7 @@ public class ResultAnnouncerFacade {
                         mapFromResultToResponseDto(resultResponseCached.get()), ALREADY_CHECKED.info);
             }
         }
-        ResultDto resultDto = checkerFacade.findByHash(hash);
+        ResultDto resultDto = checkerFacade.findByTicketId(hash);
         if (resultDto == null) {
             return new ResultResponseDto(null, HASH_DOES_NOT_EXIST_MESSAGE.info);
         }
@@ -40,14 +38,14 @@ public class ResultAnnouncerFacade {
         if (resultRepository.existsById(hash) && !isAfterResultAnnouncementTime(resultDto)) {
             return new ResultResponseDto(responseDto, WAIT_MESSAGE.info);
         }
-        if (checkerFacade.findByHash(hash).isWinner()) {
+        if (checkerFacade.findByTicketId(hash).isWinner()) {
             return new ResultResponseDto(responseDto, WIN_MESSAGE.info);
         }
         return new ResultResponseDto(responseDto, LOSE_MESSAGE.info);
     }
 
     private boolean isAfterResultAnnouncementTime(ResultDto resultDto) {
-        LocalDateTime announcementDateTime = LocalDateTime.of(resultDto.drawDate().toLocalDate(), RESULTS_ANNOUNCEMENT_TIME); //
+        LocalDateTime announcementDateTime = resultDto.drawDate();
         return LocalDateTime.now(clock).isAfter(announcementDateTime);
     }
 

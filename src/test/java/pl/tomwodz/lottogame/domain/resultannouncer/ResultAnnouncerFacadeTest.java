@@ -13,7 +13,6 @@ import java.time.ZoneOffset;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static pl.tomwodz.lottogame.domain.resultannouncer.MessageResponse.*;
@@ -41,7 +40,7 @@ class ResultAnnouncerFacadeTest {
                 .isWinner(false)
                 .build();
 
-        when(resultCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+        when(resultCheckerFacade.findByTicketId(hash)).thenReturn(resultDto);
 
         //when
         ResultResponseDto resultResponseDto = resultAnnouncerFacade.checkResult(hash);
@@ -73,7 +72,7 @@ class ResultAnnouncerFacadeTest {
                 .isWinner(true)
                 .build();
 
-        when(resultCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+        when(resultCheckerFacade.findByTicketId(hash)).thenReturn(resultDto);
 
         //when
         ResultResponseDto resultResponseDto = resultAnnouncerFacade.checkResult(hash);
@@ -108,7 +107,7 @@ class ResultAnnouncerFacadeTest {
                 .drawDate(drawDate)
                 .isWinner(true)
                 .build();
-        when(resultCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+        when(resultCheckerFacade.findByTicketId(hash)).thenReturn(resultDto);
 
         //when
         ResultResponseDto resultResponseDto = resultAnnouncerFacade.checkResult(hash);
@@ -130,7 +129,7 @@ class ResultAnnouncerFacadeTest {
     void ItShouldReturnResponseWithHashDoesNotExistMessageIfHashDoesNotExist() {
         //given
         String hash = "111";
-        when(resultCheckerFacade.findByHash(hash)).thenReturn(null);
+        when(resultCheckerFacade.findByTicketId(hash)).thenReturn(null);
 
         //when
         ResultResponseDto resultResponseDto = resultAnnouncerFacade.checkResult(hash);
@@ -152,7 +151,7 @@ class ResultAnnouncerFacadeTest {
                 .drawDate(drawDate)
                 .isWinner(true)
                 .build();
-        when(resultCheckerFacade.findByHash(hash)).thenReturn(resultDto);
+        when(resultCheckerFacade.findByTicketId(hash)).thenReturn(resultDto);
         ResultResponseDto resultResponseDtoTest = resultAnnouncerFacade.checkResult(hash);
         String test = resultResponseDtoTest.responseDto().hash();
 

@@ -28,3 +28,5 @@ lotto-game:
       upperBand: 99
       countOut: 25
     lotteryRunOccurrence: "0 0 12 * * 6"
+  result-checker:
+    lotteryRunOccurrence: "0 55 11 * * 6"
