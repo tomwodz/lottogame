@@ -1,4 +1,4 @@
-package pl.tomwodz.lottogame.http.numbergenerator;
+package pl.tomwodz.lottogame.http.numberclient;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.http.Fault;
