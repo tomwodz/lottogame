@@ -6,6 +6,7 @@ import pl.tomwodz.lottogame.domain.numberreceiver.dto.NumberReceiverResponseDto;
 import pl.tomwodz.lottogame.domain.numberreceiver.dto.TicketDto;
 import pl.tomwodz.lottogame.domain.validator.ValidatorFacade;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.Set;
 public class NumberReceiverFacade {
 
     private final TicketRepository ticketRepository;
+    private final Clock clock;
     private final HashGenerator hashGenerator;
     private final ValidatorFacade validatorFacade;
     private final DrawDateGeneratorFacade drawDateGeneratorFacade;
