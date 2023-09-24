@@ -1,17 +1,17 @@
 package pl.tomwodz.lottogame.domain.validator;
 
+import pl.tomwodz.lottogame.domain.numbergenerator.dto.CriteriaForGenerateNumbersConfigurationProperties;
+
 import java.util.Set;
 
 class ValidatorNumber {
 
-    private static final int MAX_NUMBERS_FROM_USER = 6;
-    private static final int MINIMAL_NUMBER_FROM_USER = 1;
-    private static final int MAXIMAL_NUMBER_FROM_USER = 99;
+    ;
 
-    boolean areAllNumbersInRange(Set<Integer> numbersFromUser) {
+    boolean areAllNumbersInRange(Set<Integer> numbersFromUser, CriteriaForGenerateNumbersConfigurationProperties criteria) {
         return numbersFromUser.stream()
-                .filter(number -> number >= MINIMAL_NUMBER_FROM_USER)
-                .filter(number -> number <= MAXIMAL_NUMBER_FROM_USER)
-                .count() == MAX_NUMBERS_FROM_USER;
+                .filter(number -> number >= criteria.lowerBand())
+                .filter(number -> number <= criteria.upperBand())
+                .count() == criteria.count();
     }
 }

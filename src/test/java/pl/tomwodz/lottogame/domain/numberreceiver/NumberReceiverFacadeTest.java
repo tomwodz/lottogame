@@ -1,8 +1,12 @@
 package pl.tomwodz.lottogame.domain.numberreceiver;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Spy;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import pl.tomwodz.lottogame.domain.AdjustableClock;
 import pl.tomwodz.lottogame.domain.drawdategenerator.DrawDateGeneratorFacade;
+import pl.tomwodz.lottogame.domain.numbergenerator.dto.CriteriaForGenerateNumbersConfigurationProperties;
 import pl.tomwodz.lottogame.domain.numberreceiver.dto.NumberReceiverResponseDto;
 import pl.tomwodz.lottogame.domain.numberreceiver.dto.TicketDto;
 import pl.tomwodz.lottogame.domain.validator.ValidatorConfiguration;
@@ -16,10 +20,20 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
 class NumberReceiverFacadeTest {
+
+    CriteriaForGenerateNumbersConfigurationProperties criteria = CriteriaForGenerateNumbersConfigurationProperties
+            .builder()
+            .lowerBand(1)
+            .upperBand(99)
+            .count(6)
+            .build();
+
     AdjustableClock clock = new AdjustableClock(LocalDateTime.of(2023,9,7, 14, 0, 0).toInstant(ZoneOffset.UTC), ZoneId.systemDefault());
-    ValidatorFacade validatorFacade = new ValidatorConfiguration().validatorFacade();
+    ValidatorFacade validatorFacade = new ValidatorConfiguration().validatorFacade(criteria);
 
     NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().numberReceiverFacade(
             new TicketRepositoryTestImpl(),
