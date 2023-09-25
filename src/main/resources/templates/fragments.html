@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<header>
+    <div class="header-img">
+        <div class="header-text">
+            <h1>Lottogame</h1>
+            <p>tomwodz - Tomasz Wodziński</p>
+        </div>
+        <div class="header-bg"></div>
+    </div>
+</header>
+<nav class="nav" th:fragment="nav">
+    <div>
+        <a href="/" class="btn">Strona Główna</a>
+        <a href="/inputNumbers" class="btn">Zagraj</a>
+        <a href="/results" class="btn">Wyniki</a>
+    </div>
+</nav>
+<footer class="footer" th:fragment="footer">
+</footer>
+
+</body>
+</html>

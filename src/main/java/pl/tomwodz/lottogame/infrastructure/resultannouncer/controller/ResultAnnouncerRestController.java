@@ -12,7 +12,7 @@ import pl.tomwodz.lottogame.domain.resultchecker.ResultCheckerFacade;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/results")
+@RequestMapping("api/v1/results")
 public class ResultAnnouncerRestController {
 
     private final ResultAnnouncerFacade resultAnnouncerFacade;
