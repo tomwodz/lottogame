@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lottogame - Tomasz Wodziński</title>
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+<body>
+<header th:replace="~{fragments.html :: header}"></header>
+<nav th:replace="~{fragments.html :: nav}"></nav>
+<main>
+    <section class="section-content center">
+        <h2>Zagraj</h2>
+        <div>Data losowania</div>
+        <div th:text="${#temporals.format(drawDate, 'dd-MM-yyyy HH:mm')}"></div>
+        <div>
+        <form method="post">
+            <input type="number" name="first" id="first" class="input-numbers" placeholder="" th:field="*{inputNumbers.first}">
+            <input type="number" name="second" id="second" class="input-numbers" placeholder="" th:field="*{inputNumbers.second}">
+            <input type="number" name="third" id="third" class="input-numbers" placeholder="" th:field="*{inputNumbers.third}">
+            <input type="number" name="fourth" id="fourth" class="input-numbers" placeholder="" th:field="*{inputNumbers.fourth}">
+            <input type="number" name="fifth" id="fifth" class="input-numbers" placeholder="" th:field="*{inputNumbers.fifth}">
+            <input type="number" name="sixth" id="sixth" class="input-numbers" placeholder="" th:field="*{inputNumbers.sixth}">
+            <input type="submit" value="Zagraj" class="btn">
+        </form>
+        </div>
+        <div>Wybierz 6 różnych liczb z zakresu 1-99.</div>
+    </section>
+</main>
+<footer th:replace="~{fragments.html :: footer}"></footer>
+</body>
+</html>

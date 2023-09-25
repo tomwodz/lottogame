@@ -88,7 +88,7 @@ public class UserPlayedLottoAndWonIntegrationTest extends BaseIntegrationTest {
         //step 3: user made POST /inputNumbers with 6 numbers (1, 2, 3, 4, 5, 6) at 16-11-2022 10:00 and system returned OK(200) with message: “success” and Ticket (DrawDate:19.11.2022 12:00 (Saturday), TicketId: sampleTicketId)
         //given
         //when
-        ResultActions performPostInputNumbers = mockMvc.perform(post("/inputNumbers")
+        ResultActions performPostInputNumbers = mockMvc.perform(post("/api/v1/inputNumbers")
                 .content(
                         """
                         {
@@ -112,7 +112,7 @@ public class UserPlayedLottoAndWonIntegrationTest extends BaseIntegrationTest {
         //step 4: user made GET /results/notExistingId and system returned 404(NOT_FOUND) and body with (message: Not found for id: notExistingId and status NOT_FOUND)
         //given
         //when
-        ResultActions performGetResultsWithNotExistingId = mockMvc.perform(get("/results/" + "notExistingId"));
+        ResultActions performGetResultsWithNotExistingId = mockMvc.perform(get("/api/v1/results/" + "notExistingId"));
         //then
         performGetResultsWithNotExistingId.andExpect(status().isNotFound())
                 .andExpect(content().json(
@@ -158,7 +158,7 @@ public class UserPlayedLottoAndWonIntegrationTest extends BaseIntegrationTest {
         //step 8: user made GET /results/sampleTicketId and system returned 200 (OK)
         //given
         //when
-        ResultActions performGetResultsWithExistsTicketId = mockMvc.perform(get("/results/" + tickedId));
+        ResultActions performGetResultsWithExistsTicketId = mockMvc.perform(get("/api/v1/results/" + tickedId));
 
         //then
         MvcResult mvcResultWithExistsTicketId = performGetResultsWithExistsTicketId.andExpect(status().isOk())

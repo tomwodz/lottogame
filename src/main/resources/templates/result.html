@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lottogame - Tomasz Wodziński</title>
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+<body>
+<header th:replace="~{fragments.html :: header}"></header>
+<nav th:replace="~{fragments.html :: nav}"></nav>
+<main>
+    <section class="section-content center">
+        <h2>Wyniki</h2>
+        <div>Numer blietu:</div>
+        <div th:text="${result.responseDto().hash()}"></div>
+        <div>Data losowania:</div>
+        <div th:text="${#temporals.format(result.responseDto().drawDate(), 'dd-MM-yyyy HH:mm')}"></div>
+        <div>Liczby wylosowane:</div>
+        <div th:text="${result.responseDto().numbers()}"></div>
+        <div>Trafione liczby:</div>:</div>
+        <div th:text="${result.responseDto().hitNumbers()}"></div>
+        <div>Czy wygrałeś?</div>:</div>
+        <div th:text="${result.responseDto().isWinner()}"></div>
+    </section>
+</main>
+<footer th:replace="~{fragments.html :: footer}"></footer>
+</body>
+</html>

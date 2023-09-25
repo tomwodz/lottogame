@@ -19,7 +19,7 @@ public class ApiValidationFailedIntegrationTest extends BaseIntegrationTest {
 
         //given
         //when
-        ResultActions perform = mockMvc.perform(post("/inputNumbers")
+        ResultActions perform = mockMvc.perform(post("/api/v1/inputNumbers")
                 .content(
                         """
                         {
@@ -44,7 +44,7 @@ public class ApiValidationFailedIntegrationTest extends BaseIntegrationTest {
 
         //given
         //when
-        ResultActions perform = mockMvc.perform(post("/inputNumbers")
+        ResultActions perform = mockMvc.perform(post("/api/v1/inputNumbers")
                 .content(
                         """
                                 {

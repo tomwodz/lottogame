@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lottogame - Tomasz Wodziński</title>
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+<body>
+<header th:replace="~{fragments.html :: header}"></header>
+<nav th:replace="~{fragments.html :: nav}"></nav>
+<main>
+    <section class="section-content center">
+        <h2>Sprawdź wyniki</h2>
+        <form method="post">
+            <input type="text" name="ticketId" id="ticketId" class="ticketId" placeholder="np. 8005b7e0-9375-4636-b085-c9d83f80b067" th:field="*{ticketId.id}">
+            <input type="submit" value="Sprawdź" class="btn">
+        </form>
+    </section>
+</main>
+<footer th:replace="~{fragments.html :: footer}"></footer>
+</body>
+</html>
