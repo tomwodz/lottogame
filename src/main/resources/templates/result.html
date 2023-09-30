@@ -16,7 +16,9 @@
         <div th:text="${result.responseDto().hash()}"></div>
         <div>Data losowania:</div>
         <div th:text="${#temporals.format(result.responseDto().drawDate(), 'dd-MM-yyyy HH:mm')}"></div>
-        <div>Liczby wylosowane:</div>
+        <div>Wylosowane liczby:</div>
+        <div th:text="${winningNumbers.getWinningNumbers()}"></div>
+        <div>Liczby z kuponu:</div>
         <div th:text="${result.responseDto().numbers()}"></div>
         <div>Trafione liczby:</div>:</div>
         <div th:text="${result.responseDto().hitNumbers()}"></div>

@@ -113,8 +113,6 @@ section ~div {
 .ticketId {
     display: block;
     margin: 10px auto;
-    min-width: 350px;
-    max-width: 450px;
     width: 80%;
     text-align: center;
 }

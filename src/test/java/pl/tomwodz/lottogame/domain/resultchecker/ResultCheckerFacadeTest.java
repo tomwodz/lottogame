@@ -1,6 +1,7 @@
 package pl.tomwodz.lottogame.domain.resultchecker;
 
 import org.junit.jupiter.api.Test;
+import pl.tomwodz.lottogame.domain.drawdategenerator.DrawDateGeneratorFacade;
 import pl.tomwodz.lottogame.domain.numbergenerator.NumberGeneratorFacade;
 import pl.tomwodz.lottogame.domain.numbergenerator.dto.WinningNumbersDto;
 import pl.tomwodz.lottogame.domain.numberreceiver.NumberReceiverFacade;
@@ -22,14 +23,19 @@ class ResultCheckerFacadeTest {
 
     NumberReceiverFacade numberReceiverFacade = mock(NumberReceiverFacade.class);
     NumberGeneratorFacade numberGeneratorFacade = mock(NumberGeneratorFacade.class);
+
+    DrawDateGeneratorFacade drawDateGeneratorFacade = mock(DrawDateGeneratorFacade.class);
     ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration()
-            .resultCheckerFacade(numberReceiverFacade, numberGeneratorFacade, playerRepository);
+            .resultCheckerFacade(numberReceiverFacade, numberGeneratorFacade, playerRepository, drawDateGeneratorFacade);
+
+    LocalDateTime drawDate = LocalDateTime.of(2023, 9, 14, 12, 0, 0);
 
     @Test
     void invalidNullWinningNumbersShouldGenerateFailMessage() {
 
         //given
-        when(numberGeneratorFacade.generateWinningNumbers()).thenReturn(WinningNumbersDto.builder()
+        when(drawDateGeneratorFacade.getNextDrawDate()).thenReturn(drawDate);
+        when(numberGeneratorFacade.retrieveWinningNumberByDate(drawDate)).thenReturn(WinningNumbersDto.builder()
                 .winningNumbers(null)
                 .build());
 
@@ -46,7 +52,8 @@ class ResultCheckerFacadeTest {
     void WinningNumbersShouldGenerateSuccessMessage() {
 
         //given
-        when(numberGeneratorFacade.generateWinningNumbers()).thenReturn(WinningNumbersDto.builder()
+        when(drawDateGeneratorFacade.getNextDrawDate()).thenReturn(drawDate);
+        when(numberGeneratorFacade.retrieveWinningNumberByDate(drawDate)).thenReturn(WinningNumbersDto.builder()
                 .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .build());
 
@@ -64,7 +71,8 @@ class ResultCheckerFacadeTest {
     void invalidEmptyWinningNumbersShouldGenerateFailMessage() {
 
         //given
-        when(numberGeneratorFacade.generateWinningNumbers()).thenReturn(WinningNumbersDto.builder()
+        when(drawDateGeneratorFacade.getNextDrawDate()).thenReturn(drawDate);
+        when(numberGeneratorFacade.retrieveWinningNumberByDate(drawDate)).thenReturn(WinningNumbersDto.builder()
                 .winningNumbers(null)
                 .build());
 
@@ -81,8 +89,8 @@ class ResultCheckerFacadeTest {
     @Test
     void ItShouldGenerateResultWithCorrectCredentials() {
         //given
-        LocalDateTime drawDate = LocalDateTime.of(2023, 9, 14, 12, 0, 0);
-        when(numberGeneratorFacade.generateWinningNumbers()).thenReturn(WinningNumbersDto.builder()
+        when(drawDateGeneratorFacade.getNextDrawDate()).thenReturn(drawDate);
+        when(numberGeneratorFacade.retrieveWinningNumberByDate(drawDate)).thenReturn(WinningNumbersDto.builder()
                 .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .build());
         String hash = "001";
@@ -123,8 +131,8 @@ class ResultCheckerFacadeTest {
     @Test
     void ItShouldGenerateAllPlayersWithCorrectMessage() {
         //given
-        LocalDateTime drawDate = LocalDateTime.of(2022, 12, 17, 12, 0, 0);
-        when(numberGeneratorFacade.generateWinningNumbers()).thenReturn(WinningNumbersDto.builder()
+        when(drawDateGeneratorFacade.getNextDrawDate()).thenReturn(drawDate);
+        when(numberGeneratorFacade.retrieveWinningNumberByDate(drawDate)).thenReturn(WinningNumbersDto.builder()
                 .winningNumbers(Set.of(1, 2, 3, 4, 5, 6))
                 .build());
         when(numberReceiverFacade.retrieveAllTicketsByNextDrawDate()).thenReturn(
