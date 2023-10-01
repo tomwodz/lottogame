@@ -2,11 +2,13 @@ package pl.tomwodz.lottogame.domain.drawdategenerator;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import pl.tomwodz.lottogame.domain.drawdategenerator.dto.DrawDateResponseDto;
 
 import java.time.Clock;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 
@@ -27,6 +29,14 @@ public class DrawDateGeneratorFacade {
         }
         LocalDateTime drawDate = currentDateTime.with(NEXT_DRAW_DAY);
         return LocalDateTime.of(drawDate.toLocalDate(), DRAW_TIME);
+    }
+
+    public DrawDateResponseDto getNextDrawDateDto(){
+        var nextDrawDate = this.getNextDrawDate();
+        return DrawDateResponseDto
+                .builder()
+                .dateDraw(nextDrawDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build();
     }
 
     private boolean isSaturdayAndBeforeNoon(LocalDateTime currentDateTime) {

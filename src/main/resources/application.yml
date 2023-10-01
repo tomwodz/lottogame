@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://tomwodz:tomwodz@mongo_lottogame:27017/mongo_lottogame
+      uri: mongodb://tomwodz:tomwodz@localhost:27017/mongo_lottogame
       config:
         enabled: true
         write:
@@ -30,3 +30,4 @@ lotto-game:
     lotteryRunOccurrence: "0 56 11 * * 6"
   result-checker:
     lotteryRunOccurrence: "0 58 11 * * 6"
+
